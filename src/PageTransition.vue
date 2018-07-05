@@ -2,19 +2,21 @@
   <div id="app" ref="app">
     <transition :name="transitionName">
       <keep-alive>
-        <router-view class="child-view"></router-view>
+        <!-- 如果不给显示的页面设置最小的高度，从前一个很长的页面到下一个页面也是很长，即使内容很少 -->
+        <router-view class="child-view" :style="styles" :class="{paddingBottom:isShow}"></router-view>
       </keep-alive>
     </transition>
     <!-- 更多样式参考 https://github.com/jkchao/vue-loading/blob/master/src/App.vue -->
     <vue-loading type="bars" color="#20A0FF" :size="{ width: '30px', height: '30px' }" v-show="showLoad" ></vue-loading>
+    <!-- VUX底部固定菜单，默认是absolute，手动修改成fixed -->
     <tabbar v-show="isShow">
-      <tabbar-item selected @on-item-click="url('index')">
+      <tabbar-item selected @on-item-click="link('index')">
         <span slot="label">首页</span>
       </tabbar-item>
       <tabbar-item show-dot>
         <span slot="label">Message</span>
       </tabbar-item>
-      <tabbar-item @on-item-click="url('login')">
+      <tabbar-item @on-item-click="link('login')">
         <span slot="label">登录</span>
       </tabbar-item>
       <tabbar-item badge="2">
@@ -70,20 +72,24 @@ export default {
   },
   methods: {
     ...mapActions(['LOGIN']),
-    url:function(link){
+    link:function(url){
         this.$router.push({
-            name:link
+            name:url
         })
     }
   },
   mounted() {
+    this.$refs['app'].style.minHeight = document.body.clientHeight+'px'
     var $this=this
+
     /**
      * [instance 初始化axios对象]
-     * @type {[type]}
      */
     let instance = axios.create({})
 
+    /**
+     * [axios请求前]
+     */
     instance.interceptors.request.use(function(requestConfig){
         $this.showLoad=true
         return requestConfig;
@@ -91,6 +97,9 @@ export default {
         return Promise.reject(error);
     })
 
+    /**
+     * [axios请求后]
+     */
     instance.interceptors.response.use(function(response){
         $this.showLoad=false
         response.body = response.data
@@ -102,10 +111,18 @@ export default {
         return Promise.reject(error);
     })
 
+    /*
+    * 添加VUE实例属性用来代替axios
+    */
     Vue.prototype.$http = instance
     Vue.http = instance
+
     this.$refs['app'].style.minHeight = document.body.clientHeight+'px';
 
+
+    /*
+    * 测试axios loading效果用，默认要跳到哪个页面
+    */
     this.LOGIN({username:'',password:''}).then((data) => {
         this.$router.push({
             name:'index'
@@ -121,10 +138,18 @@ export default {
     })
   },
   computed: {
-
-  },
-  watch:{
-
+    styles(){
+      if(this.isShow){
+        let minHeight = document.body.clientHeight - 60
+        return {
+          minHeight:`${minHeight}px`
+        }
+      } else {
+        return {
+          minHeight:`${document.body.clientHeight}px`
+        }
+      }
+    }
   }
 }
 </script>
@@ -132,6 +157,11 @@ export default {
 #app .weui-tabbar{
     position: fixed;
 }
+
+.paddingBottom {
+  padding-bottom: 70px;
+}
+
 .child-view {
   position: absolute;
   width: 100%;
