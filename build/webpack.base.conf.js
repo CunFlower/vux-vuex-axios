@@ -8,6 +8,19 @@ const vuxLoader = require('vux-loader')
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
+
+let output = {}
+
+if(process.env.NODE_ENV === 'production'){
+  output.path = config.build.assetsRoot
+  output.publicPath = config.build.assetsPublicPath
+} else if(process.env.NODE_ENV === 'testing'){
+  output.path = config.test.assetsRoot
+  output.publicPath = config.test.assetsPublicPath
+} else {
+  output.path = '/'
+  output.publicPath = config.dev.assetsPublicPath
+}
  
 const webpackConfig = {
   context: path.resolve(__dirname, '../'),
@@ -15,11 +28,9 @@ const webpackConfig = {
     app: './src/main.js'
   },
   output: {
-    path: config.build.assetsRoot,
+    path: output.path,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath: output.publicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
