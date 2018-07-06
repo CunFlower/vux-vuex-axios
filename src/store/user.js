@@ -103,6 +103,13 @@ export default {
                     reject()
                 })
             })
+        },
+        testAction(commit){
+            return new Promise((resolve,reject) =>{
+                setTimeout(()=>{
+                    console.log(111111)
+                },1000)
+            })
         }
     },
     getters:{

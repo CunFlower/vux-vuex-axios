@@ -23,7 +23,7 @@ export default {
     }
   },
   mounted(){
-    
+    this.$store.dispatch('testAction')
   },
   components: {
     Group,
