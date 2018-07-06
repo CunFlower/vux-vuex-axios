@@ -9,21 +9,7 @@
     <h2>Essential Links</h2>
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    
+    {{list}}
   </div>
 </template>
 
@@ -36,9 +22,17 @@ export default {
       msg: 'Welcome to index'
     }
   },
+  mounted(){
+    
+  },
   components: {
     Group,
     Cell
+  },
+  computed:{
+    list(){
+      return this.$store.getters.list
+    }
   }
 }
 </script>

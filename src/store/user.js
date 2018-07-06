@@ -39,7 +39,7 @@ const LOGOUT_URL =  config.apiUrl + '/user/logout'
 
 export default {
     state:{
-
+        arr:[1,2,6,7,0,5]
     },
     mutations:{
         /**
@@ -103,6 +103,12 @@ export default {
                     reject()
                 })
             })
+        }
+    },
+    getters:{
+        list:state =>{
+            // return state.arr.filter(item => item >5)
+            return state['arr'].filter(item => item >5)
         }
     }
 }
