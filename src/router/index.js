@@ -23,6 +23,15 @@ const routes = [{
       component: (resolve) => require(['../views/login.vue'], resolve)
     },
     {
+      path: '/404',
+      name: '404',
+      meta: {
+        title: '没有找到页面',
+        isShowNavbar: false
+      },
+      component: (resolve) => require(['../views/404.vue'], resolve)
+    },
+    {
       path: '/index',
       name: 'index',
       meta: {
@@ -32,7 +41,12 @@ const routes = [{
       component: (resolve) => require(['../views/index.vue'], resolve)
     }
   ]
-}]
+},
+{
+  path: '*',
+  redirect:'/404'
+}
+]
 
 export default new Router({
   routes,
