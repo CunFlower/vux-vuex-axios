@@ -1,5 +1,4 @@
 'use strict'
-const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')
@@ -88,8 +87,7 @@ module.exports = new Promise((resolve, reject) => {
         onErrors: config.dev.notifyOnErrors
         ? utils.createNotifierCallback()
         : undefined
-      }),
-      new OpenBrowserPlugin({ url: "http://"+devWebpackConfig.devServer.host+":"+port })
+      })
     )
 
       resolve(devWebpackConfig)
